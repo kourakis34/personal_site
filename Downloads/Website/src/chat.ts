@@ -13,9 +13,22 @@ export class ChatManager {
   private chatConsole: HTMLElement | null = null;
   private photoFrame: HTMLElement | null = null;
   private isExpanded = false;
+  private sessionId: string;
+  private backendUrl = 'https://personal-site-7mv2.onrender.com/api/chat';
+  private isLoading = false;
 
   constructor() {
+    this.sessionId = this.getOrCreateSessionId();
     this.initialize();
+  }
+
+  private getOrCreateSessionId(): string {
+    let sessionId = localStorage.getItem('chat_session_id');
+    if (!sessionId) {
+      sessionId = crypto.randomUUID();
+      localStorage.setItem('chat_session_id', sessionId);
+    }
+    return sessionId;
   }
 
   private initialize() {
@@ -79,7 +92,7 @@ export class ChatManager {
   private handleSubmit(e: Event) {
     e.preventDefault();
 
-    if (!this.inputElement || !this.inputElement.value.trim()) {
+    if (!this.inputElement || !this.inputElement.value.trim() || this.isLoading) {
       return;
     }
 
@@ -116,32 +129,44 @@ export class ChatManager {
     this.logElement.appendChild(lineDiv);
   }
 
-  private generateResponse(userMessage: string) {
-    const lowerMessage = userMessage.toLowerCase();
+  private async generateResponse(userMessage: string) {
+    this.isLoading = true;
+    this.updateStatus('Thinking...');
 
-    let response = '';
+    try {
+      const response = await fetch(this.backendUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          session_id: this.sessionId,
+          message: userMessage,
+        }),
+      });
 
-    if (lowerMessage.includes('l3harris') || lowerMessage.includes('work')) {
-      response = 'I worked on some cool projects at L3Harris. Add your details here!';
-    } else if (lowerMessage.includes('experience') || lowerMessage.includes('background')) {
-      response = 'I have experience in various areas. Check the experience page for more!';
-    } else if (lowerMessage.includes('project')) {
-      response = 'I have several projects I\'m working on. Visit the projects page to learn more!';
-    } else if (lowerMessage.includes('hi') || lowerMessage.includes('hello') || lowerMessage.includes('hey')) {
-      response = 'Hey! Nice to meet you. Ask me anything!';
-    } else if (lowerMessage.includes('?')) {
-      response = 'That\'s a great question! You can customize these responses in chat.ts';
-    } else {
-      response = 'Interesting! Tell me more or check out my experience page.';
-    }
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
 
-    setTimeout(() => {
+      const data = await response.json();
       this.addMessage({
         type: 'assistant',
-        content: response,
+        content: data.response,
         timestamp: new Date()
       });
-    }, 300);
+      this.updateStatus('Ready to chat');
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      this.addMessage({
+        type: 'assistant',
+        content: `Sorry, I couldn't get a response (${errorMsg}). Try again?`,
+        timestamp: new Date()
+      });
+      this.updateStatus('Error — try again');
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   private scrollToBottom() {
