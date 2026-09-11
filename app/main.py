@@ -26,6 +26,13 @@ async def health():
 
 
 # Serve static files (frontend build)
-dist_path = Path(__file__).parent.parent / "dist"
-if dist_path.exists():
-    app.mount("/", StaticFiles(directory=dist_path, html=True), name="static")
+# Try multiple possible locations for dist folder
+possible_paths = [
+    Path(__file__).parent.parent / "dist",  # backend/dist
+    Path(__file__).parent.parent.parent / "dist",  # root dist
+]
+
+for dist_path in possible_paths:
+    if dist_path.exists() and (dist_path / "index.html").exists():
+        app.mount("/", StaticFiles(directory=dist_path, html=True), name="static")
+        break
