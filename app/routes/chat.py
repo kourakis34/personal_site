@@ -35,7 +35,7 @@ async def call_llm(message: str) -> tuple[str, int, int]:
         print(f"Calling OpenRouter with headers: {headers}")
         print(f"Payload: {payload}")
         response = await client.post(
-            "https://openrouter.io/api/v1/chat/completions",
+            "https://openrouter.ai/api/v1/chat/completions",
             json=payload,
             headers=headers,
             timeout=30.0
