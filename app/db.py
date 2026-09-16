@@ -1,6 +1,8 @@
+import logging
 from supabase import create_client
 from app.config import settings
 
+logger = logging.getLogger(__name__)
 _supabase = None
 
 
@@ -17,13 +19,16 @@ def log_conversation(session_id: str, user_message: str, assistant_response: str
         return
 
     try:
+        print(f"[LOG] Starting conversation log for session {session_id[:8]}...")
         supabase = get_supabase()
-        supabase.table("conversations").insert({
+        result = supabase.table("conversations").insert({
             "session_id": session_id,
             "user_message": user_message,
             "assistant_response": assistant_response,
             "model_used": model_used,
             "latency_ms": latency_ms,
         }).execute()
+        print(f"[LOG] Conversation logged successfully: {result}")
     except Exception as e:
-        print(f"Failed to log conversation: {e}")
+        print(f"[LOG_ERROR] Failed to log conversation: {type(e).__name__}: {e}")
+        logger.error(f"Database write failed: {e}", exc_info=True)
