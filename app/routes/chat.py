@@ -4,52 +4,31 @@ from fastapi import APIRouter, HTTPException, BackgroundTasks
 from app.models import ChatRequest, ChatResponse
 from app.config import settings
 from app.db import log_conversation
+from typesafe_sdk import Noul, TypeSafeClient
 
+client = TypeSafeClient(api_key=settings.typesafe_api_key)
 router = APIRouter()
 
 
+
 async def is_question_about_nick(message: str) -> bool:
-    """Check if question is related to Nick using LLM classification."""
-    headers = {
-        "Authorization": f"Bearer {settings.openrouter_api_key}",
-        "HTTP-Referer": settings.allowed_origin,
-        "X-Title": "Nick's Personal Site Chat",
-    }
+    ticket = message
 
-    payload = {
-        "model": "openai/gpt-3.5-turbo",
-        "messages": [
-            {
-                "role": "system",
-                "content": "You are a classifier. Respond with only 'yes' or 'no'. A question is related to Nick if it asks about: Nick Kourakis, his experience, skills, projects, background, education, work, books he's read, or anything about him personally. Generic questions or requests unrelated to Nick are 'no'."
-            },
-            {
-                "role": "user",
-                "content": f"Is this question related to Nick? '{message}'"
-            }
-        ],
-        "max_tokens": 5,
-    }
+    response = client.system_one(
+        state=ticket,
+        questions={
+            "is_relevant": Noul(
+                instructions=f"This message inquires about Nick?",
+            ),
+        },
+    )
 
-    try:
-        async with httpx.AsyncClient() as client:
-            response = await client.post(
-                "https://openrouter.ai/api/v1/chat/completions",
-                json=payload,
-                headers=headers,
-                timeout=10.0
-            )
+    if response.answers["is_relevant"].noul > 0.5:
+        return [True, response.answers["is_relevant"].noul]
+    else:
+        return [False, response.answers["is_relevant"].noul]
 
-            if response.status_code != 200:
-                print(f"Classification API error: {response.status_code}")
-                return True
-
-            data = response.json()
-            classification = data["choices"][0]["message"]["content"].strip().lower()
-            return "yes" in classification
-    except Exception as e:
-        print(f"Classification error: {e}")
-        return True
+    
 
 
 async def call_llm(message: str) -> tuple[str, int, int]:
@@ -116,8 +95,10 @@ async def chat(request: ChatRequest, background_tasks: BackgroundTasks):
 
     # Check if question is about Nick
     is_relevant = await is_question_about_nick(request.message)
-    if not is_relevant:
-        response_text = "Keep questions related to Nick and his experience."
+
+    if not is_relevant[0]:
+        number = 100 - is_relevant[1]*100
+        response_text = f"Keep questions related to Nick and his experience. Typesafe's JEV model is {number}% confident that this question is off topic :)"
         latency_ms = int((time.time() - start_time) * 1000)
         if settings.enable_logging:
             background_tasks.add_task(
