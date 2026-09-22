@@ -14,7 +14,7 @@ export class ChatManager {
   private photoFrame: HTMLElement | null = null;
   private isExpanded = false;
   private sessionId: string;
-  private backendUrl = '/api/chat';
+  private backendUrl = 'https://personal-site-7mv2.onrender.com/api/chat';
   private isLoading = false;
 
   constructor() {
