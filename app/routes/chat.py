@@ -98,7 +98,7 @@ async def chat(request: ChatRequest, background_tasks: BackgroundTasks):
 
     if not is_relevant[0]:
         number = 100 - is_relevant[1]*100
-        response_text = f"Keep questions related to Nick and his experience. Typesafe's JEV model is {number}% confident that this question is off topic :)"
+        response_text = f"Keep questions related to Nick and his experience. Typesafe's JEV classifier model is {number}% confident that this question is off topic :)"
         latency_ms = int((time.time() - start_time) * 1000)
         if settings.enable_logging:
             background_tasks.add_task(
