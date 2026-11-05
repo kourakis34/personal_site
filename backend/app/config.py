@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     supabase_service_role_key: str
     openrouter_api_key: str
     typesafe_api_key: str
-    llm_model: str = "openai/gpt-3.5-turbo"
+    llm_model: str = "openai/gpt-4o-mini"
     allowed_origin: str = "http://localhost:5173"
     rate_limit_per_minute: int = 10
     max_message_length: int = 500
