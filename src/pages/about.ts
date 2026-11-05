@@ -47,10 +47,10 @@ export function renderAbout(container: HTMLElement) {
   const content = document.createElement('div');
   content.innerHTML = `
     <p style="max-width: 65ch; margin-bottom: 1rem; color: var(--text-muted);">
-      I'm a senior at Carnegie Mellon studying Statistics &amp; Machine Learning (graduating May 2027) and a forward on the varsity soccer team. Born in Brazil, I grew up across six countries and speak English, Spanish and Portuguese. I build and evaluate LLM systems, and I'm looking for software engineering and AI roles in New York.
+      I'm a senior at Carnegie Mellon studying Statistics &amp; Machine Learning (graduating May 2027) and a forward on the varsity soccer team. Born in Brazil, I grew up across six countries and speak English, Spanish and Portuguese. I build and evaluate LLM systems.
     </p>
     <p style="max-width: 65ch; margin-bottom: 1rem; color: var(--text-muted);">
-      On the field, I play forward (#27) for the Carnegie Mellon Tartans, an NCAA Division III men's soccer team in the UAA. In season, that's 20+ hours a week on top of classes.
+      On the field, I play forward (#27) for the Carnegie Mellon Tartans, an NCAA Division III men's soccer team in the UAA.
     </p>
   `;
   wrap.appendChild(content);
