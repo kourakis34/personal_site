@@ -210,14 +210,6 @@ export function renderExperience(container: HTMLElement) {
           </li>`,
         ).join('')}
       </ol>
-
-      <section class="xp-cta">
-        <div>
-          <h2>Hiring for SWE or AI roles in NYC?</h2>
-          <p>Nick graduates from Carnegie Mellon in May 2027.</p>
-        </div>
-        <a href="mailto:nicholaskourakis2004@gmail.com" class="xp-cta-btn">Get in touch →</a>
-      </section>
     </div>
   `;
 
