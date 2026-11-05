@@ -89,7 +89,7 @@ export function renderHome(container: HTMLElement) {
   [
     'What did Nick work on at L3Harris?',
     'What roles is Nick looking for?',
-    "What are Nick's best projects?",
+    "What's Nick's favorite project?",
   ].forEach((q) => {
     const chip = document.createElement('button');
     chip.type = 'button';
