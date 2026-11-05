@@ -8,7 +8,8 @@ NICK_PROFILE = """
 BASICS
 - Nick Kourakis: Carnegie Mellon Statistics & Machine Learning senior and NCAA varsity soccer player
   who builds and evaluates production LLM systems.
-- Born in Brazil; grew up in a foreign-service family and has lived in 6 countries.
+- Born in Brazil; grew up in a foreign-service family and has lived in 6 countries: Brazil, the United
+  States, Cuba, Portugal, Panama and Singapore.
 - Lives in Pittsburgh, PA during the school year; home base is Florida.
 - Speaks English, Spanish (fluent) and Portuguese (fluent).
 
@@ -85,7 +86,8 @@ SOCCER
 - NCAA Division III varsity: Carnegie Mellon Tartans men's soccer (UAA conference), forward, #27.
 
 INTERESTS AND FUN FACTS
-- Born in Brazil, has lived in 6 countries, speaks 3 languages.
+- Born in Brazil, has lived in 6 countries (Brazil, the US, Cuba, Portugal, Panama and Singapore), speaks
+  3 languages.
 - Grew up around foreign service officers and ambassadors; interned at the U.S. Embassy in Singapore.
 - Hobbies: travel, real estate investing, sports analytics, and reading AI research (e.g. AlphaFold,
   alignment faking, scaling laws).

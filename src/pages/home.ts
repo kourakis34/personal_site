@@ -120,7 +120,10 @@ export function renderHome(container: HTMLElement) {
   chatFooter.className = 'cc-footer';
   chatFooter.innerHTML = `
     <span class="cc-status" aria-live="polite">Ready to chat</span>
-    <a class="cc-how" href="#how-it-works">How does this work?</a>
+    <span class="cc-links">
+      <button type="button" class="cc-clear" hidden>Clear chat</button>
+      <a class="cc-how" href="#how-it-works">How does this work?</a>
+    </span>
   `;
   chatPanel.appendChild(chatFooter);
 
@@ -136,4 +139,62 @@ export function renderHome(container: HTMLElement) {
 
   // Initialize chat
   new ChatManager();
+  setupBrainArrow(page);
+}
+
+// Draw the hand-drawn arrow from "pick my brain" to the chat box's left edge.
+// It's measured at runtime so it lands on the box at any screen width.
+function setupBrainArrow(page: HTMLElement) {
+  const line = page.querySelector<HTMLElement>('.brain-line');
+  const svg = page.querySelector<SVGSVGElement>('.brain-arrow');
+  const chat = page.querySelector<HTMLElement>('.chat-console');
+  if (!line || !svg || !chat) return;
+  const body = svg.querySelector<SVGPathElement>('.brain-arrow-path');
+  const head = svg.querySelector<SVGPathElement>('.brain-arrow-head');
+  if (!body || !head) return;
+
+  const draw = () => {
+    if (!svg.isConnected) return;
+    if (getComputedStyle(svg).display === 'none') return;
+    const l = line.getBoundingClientRect();
+    const c = chat.getBoundingClientRect();
+    // Start just after the text; end a little before the chat box, at the top of its label row.
+    const sx = l.right + 10;
+    const sy = l.top + l.height * 0.55;
+    const ex = c.left - 12;
+    const ey = c.top + Math.min(28, c.height / 2);
+    const w = Math.max(60, ex - sx);
+    const h = ey - sy;
+    const pad = 40;
+
+    svg.style.left = `${sx - l.left}px`;
+    svg.style.top = `${sy - l.top - pad}px`;
+    svg.style.width = `${w + 4}px`;
+    svg.style.height = `${Math.abs(h) + pad * 2}px`;
+    svg.setAttribute('viewBox', `0 ${-pad} ${w + 4} ${Math.abs(h) + pad * 2}`);
+
+    // Small loop near the start, then a long curve that arrives horizontally at the box.
+    const y = (v: number) => (h >= 0 ? v : -v);
+    body.setAttribute(
+      'd',
+      `M0 ${y(4)} C 14 ${y(-8)}, 38 ${y(-12)}, 44 ${y(2)} ` +
+        `C 50 ${y(16)}, 30 ${y(22)}, 28 ${y(10)} ` +
+        `C 26 ${y(-2)}, 52 ${y(-8)}, 72 ${y(4)} ` +
+        `C ${w * 0.55} ${y(16)}, ${w - 70} ${h}, ${w} ${h}`,
+    );
+    head.setAttribute('d', `M${w - 11} ${h - 7} L${w} ${h} L${w - 11} ${h + 7}`);
+  };
+
+  draw();
+  // Re-measure after the intro animation settles, on resize, and when the chat opens or closes.
+  window.setTimeout(draw, 900);
+  document.fonts?.ready.then(draw).catch(() => {});
+  const ro = new ResizeObserver(draw);
+  ro.observe(page);
+  ro.observe(chat);
+  window.addEventListener('resize', draw);
+  window.addEventListener('hashchange', () => {
+    ro.disconnect();
+    window.removeEventListener('resize', draw);
+  }, { once: true });
 }

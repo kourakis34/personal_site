@@ -2,7 +2,7 @@ import time
 import httpx
 from fastapi import APIRouter, HTTPException, BackgroundTasks, Request
 from fastapi.concurrency import run_in_threadpool
-from app.models import ChatRequest, ChatResponse
+from app.models import ChatRequest, ChatResponse, HistoryMessage
 from app.config import settings
 from app.db import log_conversation
 from app.profile import SYSTEM_PROMPT
@@ -32,17 +32,23 @@ def _classify(message: str) -> float:
     return response.answers["is_relevant"].noul
 
 
-async def is_question_about_nick(message: str) -> tuple[bool, float]:
+async def is_question_about_nick(message: str, history: list[HistoryMessage] | None = None) -> tuple[bool, float]:
     """Return (is_relevant, score). Fails open so a classifier outage doesn't break chat."""
     try:
-        score = await run_in_threadpool(_classify, message)
+        # Give the classifier the previous question so follow-ups like "tell me more" read as on-topic.
+        last_user = next((h.content for h in reversed(history or []) if h.role == "user"), None)
+        text = f"Previous question: {last_user}\nNew message: {message}" if last_user else message
+        score = await run_in_threadpool(_classify, text)
     except Exception as e:
         print(f"Relevance classifier failed, allowing message: {type(e).__name__}: {e}")
         return True, 1.0
     return score >= settings.relevance_threshold, score
 
 
-async def call_llm(message: str) -> tuple[str, int, int]:
+MAX_HISTORY = 8  # most recent messages sent to the model
+
+
+async def call_llm(message: str, history: list[HistoryMessage] | None = None) -> tuple[str, int, int]:
     """Call OpenRouter LLM and return response, input tokens, output tokens."""
     headers = {
         "Authorization": f"Bearer {settings.openrouter_api_key}",
@@ -53,14 +59,9 @@ async def call_llm(message: str) -> tuple[str, int, int]:
     payload = {
         "model": settings.llm_model,
         "messages": [
-            {
-                "role": "system",
-                "content": SYSTEM_PROMPT
-            },
-            {
-                "role": "user",
-                "content": message
-            }
+            {"role": "system", "content": SYSTEM_PROMPT},
+            *[{"role": h.role, "content": h.content} for h in (history or [])[-MAX_HISTORY:]],
+            {"role": "user", "content": message},
         ],
         "max_tokens": 500,
     }
@@ -101,7 +102,7 @@ async def chat(request: ChatRequest, http_request: Request, background_tasks: Ba
     start_time = time.time()
 
     # Check if question is about Nick
-    is_relevant = await is_question_about_nick(request.message)
+    is_relevant = await is_question_about_nick(request.message, request.history)
 
     if not is_relevant[0]:
         response_text = "Keep questions related to Nick and his experience."
@@ -118,7 +119,7 @@ async def chat(request: ChatRequest, http_request: Request, background_tasks: Ba
         return ChatResponse(response=response_text, session_id=request.session_id)
 
     try:
-        response_text, input_tokens, output_tokens = await call_llm(request.message)
+        response_text, input_tokens, output_tokens = await call_llm(request.message, request.history)
     except HTTPException as e:
         raise e
     except Exception as e:

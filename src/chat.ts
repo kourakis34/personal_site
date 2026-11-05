@@ -2,7 +2,13 @@ export interface Message {
   type: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+  /** Error notices are shown but never saved or sent back to the model. */
+  error?: boolean;
 }
+
+const HISTORY_KEY = 'chat_history_v1';
+const MAX_SAVED = 40; // messages kept in this browser
+const MAX_SENT = 8; // recent messages sent with each question for context
 
 export class ChatManager {
   private messages: Message[] = [];
@@ -18,11 +24,14 @@ export class ChatManager {
   private backendUrl = `${this.apiBase}/api/chat`;
   private toggleButton: HTMLButtonElement | null = null;
   private suggestionsElement: HTMLElement | null = null;
+  private initialSuggestions: HTMLElement | null = null;
+  private clearButton: HTMLButtonElement | null = null;
   private isLoading = false;
 
   constructor() {
     this.sessionId = this.getOrCreateSessionId();
     this.initialize();
+    this.restoreHistory();
     this.warmUp();
   }
 
@@ -37,6 +46,68 @@ export class ChatManager {
     } catch {
       return crypto.randomUUID();
     }
+  }
+
+  private restoreHistory() {
+    let saved: { type: 'user' | 'assistant'; content: string; timestamp: string }[] = [];
+    try {
+      saved = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+    } catch {
+      saved = [];
+    }
+    if (!Array.isArray(saved) || saved.length === 0) return;
+    this.suggestionsElement?.remove();
+    this.suggestionsElement = null;
+    for (const m of saved) {
+      if ((m.type === 'user' || m.type === 'assistant') && typeof m.content === 'string') {
+        const msg: Message = { type: m.type, content: m.content, timestamp: new Date(m.timestamp) };
+        this.messages.push(msg);
+        this.renderMessage(msg);
+      }
+    }
+    this.setClearVisible(true);
+  }
+
+  private saveHistory() {
+    try {
+      const keep = this.messages.filter((m) => !m.error).slice(-MAX_SAVED);
+      localStorage.setItem(
+        HISTORY_KEY,
+        JSON.stringify(keep.map((m) => ({ type: m.type, content: m.content, timestamp: m.timestamp.toISOString() }))),
+      );
+    } catch {
+      /* storage unavailable (private mode); history just won't persist */
+    }
+  }
+
+  private clearHistory() {
+    this.messages = [];
+    try {
+      localStorage.removeItem(HISTORY_KEY);
+    } catch {
+      /* ignore */
+    }
+    if (this.logElement) {
+      this.logElement.innerHTML = '';
+      if (this.initialSuggestions) {
+        this.logElement.appendChild(this.initialSuggestions);
+        this.suggestionsElement = this.initialSuggestions;
+      }
+    }
+    this.setClearVisible(false);
+    this.updateStatus('Ready to chat');
+    this.inputElement?.focus();
+  }
+
+  private setClearVisible(visible: boolean) {
+    if (this.clearButton) this.clearButton.hidden = !visible;
+  }
+
+  private recentHistory(): { role: 'user' | 'assistant'; content: string }[] {
+    return this.messages
+      .filter((m) => !m.error)
+      .slice(-MAX_SENT)
+      .map((m) => ({ role: m.type, content: m.content.slice(0, 4000) }));
   }
 
   // The backend sleeps when idle (Render free plan); ping it on page load so it's
@@ -54,6 +125,12 @@ export class ChatManager {
     this.photoFrame = document.querySelector('.photo-frame');
     this.toggleButton = document.querySelector('.chat-console .cc-label');
     this.suggestionsElement = document.querySelector('.cc-suggestions');
+    this.initialSuggestions = this.suggestionsElement;
+    this.clearButton = document.querySelector('.cc-clear');
+    this.clearButton?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.clearHistory();
+    });
 
     this.toggleButton?.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -147,13 +224,15 @@ export class ChatManager {
     this.suggestionsElement?.remove();
     this.suggestionsElement = null;
 
+    const history = this.recentHistory();
     this.addMessage({
       type: 'user',
       content: userMessage,
       timestamp: new Date()
     });
+    this.setClearVisible(true);
 
-    this.generateResponse(userMessage);
+    this.generateResponse(userMessage, history);
     return true;
   }
 
@@ -161,6 +240,7 @@ export class ChatManager {
     this.messages.push(message);
     this.renderMessage(message);
     this.scrollToBottom();
+    this.saveHistory();
   }
 
   private renderMessage(message: Message) {
@@ -179,7 +259,7 @@ export class ChatManager {
     this.logElement.appendChild(lineDiv);
   }
 
-  private async generateResponse(userMessage: string) {
+  private async generateResponse(userMessage: string, history: { role: 'user' | 'assistant'; content: string }[]) {
     this.isLoading = true;
     this.updateStatus('Thinking…');
     const slowTimer = window.setTimeout(
@@ -193,7 +273,7 @@ export class ChatManager {
       const response = await fetch(this.backendUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ session_id: this.sessionId, message: userMessage }),
+        body: JSON.stringify({ session_id: this.sessionId, message: userMessage, history }),
         signal: controller.signal,
       });
 
@@ -218,7 +298,7 @@ export class ChatManager {
           : error instanceof Error && !error.message.startsWith('Failed to fetch')
             ? error.message
             : "Sorry, I couldn't reach the server. Try again?";
-      this.addMessage({ type: 'assistant', content: msg, timestamp: new Date() });
+      this.addMessage({ type: 'assistant', content: msg, timestamp: new Date(), error: true });
       this.updateStatus('Something went wrong');
     } finally {
       window.clearTimeout(slowTimer);

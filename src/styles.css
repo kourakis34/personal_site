@@ -159,6 +159,7 @@ main.hero-wrap { flex: 1 1 auto; min-height: 0; display: flex; }
   width: 120px;
   height: 70px;
   overflow: visible;
+  max-width: none;
   color: var(--accent);
   pointer-events: none;
 }
@@ -352,6 +353,16 @@ nav.index a:focus-visible::after { width: 100%; }
   white-space: nowrap;
 }
 .chat-console .cc-how:hover { text-decoration: underline; }
+.chat-console .cc-links { display: flex; gap: 0.9rem; align-items: baseline; }
+.chat-console .cc-clear {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  padding: 0;
+  min-height: 0;
+}
+.chat-console .cc-clear:hover:not(:disabled) { color: var(--accent); }
+.chat-console .cc-clear[hidden] { display: none; }
 
 .chat-console .cc-log {
   padding: 0.6rem 1rem;
@@ -426,6 +437,9 @@ nav.index a:focus-visible::after { width: 100%; }
   color: var(--text-muted);
   font-style: italic;
 }
+
+/* Keep the chat input's focus ring inside the chat box instead of spilling past its edge */
+.chat-console input:focus-visible { outline-offset: -2px; }
 
 a:focus-visible, button:focus-visible, input:focus-visible {
   outline: 2px solid var(--accent);
