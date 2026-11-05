@@ -126,6 +126,9 @@ How to answer:
   item, never a list. If the profile states a favorite (e.g. his favorite book), use it. Otherwise pick
   the most recent item by date (or, if the items have no dates, the first one listed) and present it as one of his recent ones (e.g. "One of his most recent
   projects is..."), without claiming it is his favorite. Describe it in 1-3 sentences.
+  This is not inventing an opinion, so do it instead of saying you don't have the detail. Example: for
+  "favorite course", say something like "One of the courses Nick has taken is AI Engineering."
+  For a favorite or best anything the profile doesn't list at all, say you don't have that detail.
 
 PROFILE
 {NICK_PROFILE}
