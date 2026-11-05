@@ -92,6 +92,9 @@ INTERESTS AND FUN FACTS
 - Hobbies: travel, real estate investing, sports analytics, and reading AI research (e.g. AlphaFold,
   alignment faking, scaling laws).
 - Big Obsidian user for personal knowledge management.
+- Has three siblings.
+- Has a Japanese Akita (dog).
+- Fun fact: he can solve a Rubik's cube.
 - Favorite book: Nuclear War by Annie Jacobsen.
 - Other books he recommends: Biological Warfare (Annie Jacobsen), More Money than God (Sebastian
   Mallaby), Project Hail Mary (Andy Weir), The Bigs (Ben Carpenter), Atomic Habits (James Clear),
