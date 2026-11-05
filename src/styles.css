@@ -286,6 +286,8 @@ nav.index a:focus-visible::after { width: 100%; }
   margin-bottom: 0.3rem;
   word-wrap: break-word;
 }
+.chat-console .cc-log .line.bot { white-space: pre-wrap; }
+.chat-console .cc-log .line.bot strong { color: var(--text); font-weight: 600; }
 .chat-console .cc-log .prompt-char { color: var(--accent); margin-right: 0.4rem; }
 
 .chat-console form {

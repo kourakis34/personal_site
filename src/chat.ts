@@ -123,7 +123,8 @@ export class ChatManager {
     if (message.type === 'user') {
       lineDiv.innerHTML = `<span class="prompt-char">&gt;</span>${this.escapeHtml(message.content)}`;
     } else {
-      lineDiv.innerHTML = this.escapeHtml(message.content);
+      lineDiv.classList.add('bot');
+      lineDiv.innerHTML = this.formatReply(message.content);
     }
 
     this.logElement.appendChild(lineDiv);
@@ -173,6 +174,11 @@ export class ChatManager {
     if (this.logElement) {
       this.logElement.scrollTop = this.logElement.scrollHeight;
     }
+  }
+
+  // Escape first, then allow only **bold**; line breaks are kept by CSS (pre-wrap).
+  private formatReply(text: string): string {
+    return this.escapeHtml(text.trim()).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
   }
 
   private escapeHtml(text: string): string {
