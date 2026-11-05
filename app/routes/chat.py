@@ -35,7 +35,7 @@ async def call_llm(message: str) -> tuple[str, int, int]:
     """Call OpenRouter LLM and return response, input tokens, output tokens."""
     headers = {
         "Authorization": f"Bearer {settings.openrouter_api_key}",
-        "HTTP-Referer": settings.allowed_origin,
+        "HTTP-Referer": settings.allowed_origin.split(",")[0].strip(),
         "X-Title": "Nick's Personal Site Chat",
     }
 

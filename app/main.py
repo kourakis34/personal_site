@@ -10,7 +10,7 @@ app = FastAPI(title="Nick's Chat API")
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.allowed_origin],
+    allow_origins=[o.strip() for o in settings.allowed_origin.split(",") if o.strip()],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
