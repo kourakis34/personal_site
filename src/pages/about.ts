@@ -47,11 +47,30 @@ export function renderAbout(container: HTMLElement) {
   const content = document.createElement('div');
   content.innerHTML = `
     <p style="max-width: 65ch; margin-bottom: 1rem; color: var(--text-muted);">
-      I'm a senior at Carnegie Mellon studying Statistics &amp; Machine Learning (graduating May 2027) and a forward on the varsity soccer team. Born in Brazil, I grew up across six countries and speak English, Spanish and Portuguese. I build and evaluate LLM systems.
+      I'm a senior at Carnegie Mellon studying Statistics &amp; Machine Learning (graduating May 2027) and a forward on the varsity soccer team. Born in Brazil, I grew up across six countries and speak English, Spanish and Portuguese.
     </p>
     <p style="max-width: 65ch; margin-bottom: 1rem; color: var(--text-muted);">
       On the field, I play forward (#27) for the Carnegie Mellon Tartans, an NCAA Division III men's soccer team in the UAA.
     </p>
+    <section class="about-courses" aria-labelledby="about-courses-title">
+      <h2 id="about-courses-title">Relevant coursework</h2>
+      <ul>
+        <li>AI Engineering</li>
+        <li>Algorithms and Advanced Data Structures</li>
+        <li>Intro to Machine Learning</li>
+        <li>Applied Machine Learning / ML in Practice</li>
+        <li>Statistics Capstone</li>
+        <li>Principles of Imperative Computation</li>
+        <li>Fundamentals of Computer Science</li>
+        <li>Statistical Computing</li>
+        <li>Regression</li>
+        <li>Advanced Data Analysis</li>
+        <li>Probability and Statistical Inference I &amp; II</li>
+        <li>Linear Algebra</li>
+        <li>Multivariate Calculus</li>
+        <li>Discrete Math</li>
+      </ul>
+    </section>
   `;
   wrap.appendChild(content);
 

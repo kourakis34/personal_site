@@ -289,7 +289,8 @@ nav.index a:focus-visible::after { width: 100%; }
 
 .chat-console.expanded {
   flex: 1;
-  overflow: visible;
+  /* Let the message list scroll instead of the box growing past the screen */
+  min-height: 0;
 }
 
 .photo-frame.hidden {
@@ -361,6 +362,8 @@ nav.index a:focus-visible::after { width: 100%; }
   min-height: 0;
   overflow-y: auto;
   display: none;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 
 .chat-console.expanded .cc-log {
@@ -464,6 +467,13 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 }
 
 /* ---------- Experience page ---------- */
+
+/* ---------- About page ---------- */
+
+.about-courses { max-width: 760px; margin-top: 2rem; }
+.about-courses h2 { font-family: var(--font-display); font-weight: 500; font-size: 1.3rem; margin-bottom: .9rem; }
+.about-courses ul { list-style: none; display: flex; flex-wrap: wrap; gap: .5rem; }
+.about-courses li { font-size: .88rem; color: var(--text); background: var(--bg-alt); border: 1px solid var(--border); padding: .35rem .8rem; border-radius: 999px; }
 
 /* ---------- How the chat works ---------- */
 
