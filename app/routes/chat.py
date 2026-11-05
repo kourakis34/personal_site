@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException, BackgroundTasks
 from app.models import ChatRequest, ChatResponse
 from app.config import settings
 from app.db import log_conversation
+from app.profile import SYSTEM_PROMPT
 from typesafe_sdk import Noul, TypeSafeClient
 
 client = TypeSafeClient(api_key=settings.typesafe_api_key)
@@ -44,7 +45,7 @@ async def call_llm(message: str) -> tuple[str, int, int]:
         "messages": [
             {
                 "role": "system",
-                "content": "You are a friendly chatbot assistant. Be conversational, helpful, and concise."
+                "content": SYSTEM_PROMPT
             },
             {
                 "role": "user",
@@ -55,8 +56,6 @@ async def call_llm(message: str) -> tuple[str, int, int]:
     }
 
     async with httpx.AsyncClient() as client:
-        print(f"Calling OpenRouter with headers: {headers}")
-        print(f"Payload: {payload}")
         response = await client.post(
             "https://openrouter.ai/api/v1/chat/completions",
             json=payload,
@@ -64,14 +63,10 @@ async def call_llm(message: str) -> tuple[str, int, int]:
             timeout=30.0
         )
 
-        print(f"OpenRouter Response: {response.status_code}")
-        print(f"Response headers: {response.headers}")
-        print(f"Response body: {response.text}")
-
         if response.status_code != 200:
-            error_text = response.text
-            print(f"OpenRouter API Error: {response.status_code} - {error_text}")
-            raise HTTPException(status_code=response.status_code, detail=f"LLM call failed: {error_text}")
+            # Log the upstream error server-side only; never log request headers (they hold the API key).
+            print(f"OpenRouter API Error: {response.status_code} - {response.text[:500]}")
+            raise HTTPException(status_code=502, detail="The chat model is unavailable right now.")
 
         data = response.json()
         assistant_message = data["choices"][0]["message"]["content"]
