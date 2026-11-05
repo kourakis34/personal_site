@@ -1,0 +1,32 @@
+[
+  {
+    "path": "/",
+    "title": "Nick Kourakis · Statistics & ML at Carnegie Mellon",
+    "description": "Nick Kourakis is a Carnegie Mellon Statistics & Machine Learning senior (May 2027) and former ML engineering intern at L3Harris, looking for software engineering and AI roles in New York."
+  },
+  {
+    "path": "/about",
+    "title": "About · Nick Kourakis",
+    "description": "About Nick Kourakis: Carnegie Mellon Statistics & Machine Learning senior, varsity soccer forward, born in Brazil and raised across six countries."
+  },
+  {
+    "path": "/experience",
+    "title": "Experience · Nick Kourakis",
+    "description": "Nick Kourakis's experience: two machine learning internships at L3Harris, academic coaching at Carnegie Mellon, and more, plus his technical skills."
+  },
+  {
+    "path": "/projects",
+    "title": "Projects · Nick Kourakis",
+    "description": "Projects by Nick Kourakis, from modeling Wikipedia edit reverts and MLS roster spending to a LangGraph research agent and reinforcement learning."
+  },
+  {
+    "path": "/books",
+    "title": "Books · Nick Kourakis",
+    "description": "Books Nick Kourakis has read and recommends."
+  },
+  {
+    "path": "/how-it-works",
+    "title": "How the chat works · Nick Kourakis",
+    "description": "How the AI assistant on nickkourakis.com works: rate limiting, a topic classifier, and answers grounded in a written profile."
+  }
+]

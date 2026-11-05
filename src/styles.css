@@ -53,19 +53,45 @@ header.top { flex: 0 0 auto; padding-top: 1.5rem; }
   align-items: center;
 }
 
-.contact-links { display: flex; gap: 1.5rem; }
+.top-row { gap: 1.5rem; }
 
-.contact-links a {
+.wordmark {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  line-height: 1;
+}
+.wordmark span { color: var(--accent); }
+
+.site-nav { display: flex; gap: 1.75rem; margin-left: auto; }
+.site-nav a {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  padding: 0.35rem 0;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.site-nav a:hover { color: var(--text); }
+.site-nav a[aria-current="page"] { color: var(--text); border-bottom-color: var(--accent); }
+
+.top-actions { display: flex; align-items: center; gap: 0.35rem; }
+.icon-link {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
   color: var(--text-muted);
-  font-size: 0.9rem;
   transition: color 0.2s ease;
 }
-.contact-links a:hover { color: var(--accent); }
-.contact-links svg { width: 15px; height: 15px; flex: none; }
-.contact-links .label-short { display: none; }
+.icon-link:hover { color: var(--accent); }
+.icon-link svg { width: 18px; height: 18px; }
+
+.page-lede { color: var(--text-muted); max-width: 65ch; margin-bottom: 2rem; }
+.text-link { color: var(--accent); border-bottom: 1px solid currentColor; }
+.text-link:hover { opacity: .75; }
 
 /* ---------- Books ---------- */
 
@@ -470,9 +496,10 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   .wrap, .hero { padding-left: 1rem; padding-right: 1rem; }
   header.top { padding-top: 1rem; }
   .top-row { gap: 1rem; }
-  .contact-links { gap: 1.25rem; min-width: 0; }
-  .contact-links .label-full { display: none; }
-  .contact-links .label-short { display: inline; }
+  .top-row { flex-wrap: wrap; row-gap: 0.6rem; }
+  .site-nav { order: 3; width: 100%; margin-left: 0; gap: 1.25rem; overflow-x: auto; scrollbar-width: none; }
+  .site-nav::-webkit-scrollbar { display: none; }
+  .top-actions { margin-left: auto; }
   .hero { gap: 2rem; padding-top: 1.75rem; }
   .intro p.bio { margin-bottom: 0.5rem; }
   .side { padding-top: 0; }
@@ -525,12 +552,17 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 .xp-bullets { list-style: none; display: grid; gap: .4rem; }
 .xp-bullets li { position: relative; padding-left: 1.1rem; color: var(--text-muted); font-size: .95rem; line-height: 1.6; }
 .xp-bullets li::before { content: "–"; position: absolute; left: 0; color: var(--text-muted); }
+.xp-stack { font-size: .85rem; color: var(--text-muted); margin-top: .6rem; }
+.xp-section-title { font-family: var(--font-display); font-weight: 500; font-size: 1.6rem; margin: 3rem 0 1rem; }
+.xp-skills { max-width: 760px; }
+.xp-skills dl div { display: grid; grid-template-columns: 9.5rem 1fr; gap: 1rem; padding: .6rem 0; border-top: 1px solid var(--border); }
+.xp-skills dl div:last-child { border-bottom: 1px solid var(--border); }
+.xp-skills dt { font-weight: 600; font-size: .95rem; }
+.xp-skills dd { color: var(--text-muted); font-size: .95rem; }
 .xp-photos { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-top: 1.4rem; }
 .xp-photos figure { margin: 0; }
 .xp-photos img { display: block; width: 100%; aspect-ratio: 11 / 10; object-fit: cover; }
 .xp-photos figcaption { margin-top: .4rem; font-size: .8rem; color: var(--text-muted); }
-.xp-back { display: inline-block; color: var(--accent); font-size: 0.95rem; margin-bottom: 2.5rem; transition: opacity .2s ease; }
-.xp-back:hover { opacity: .7; }
 
 .xp-hero { max-width: 760px; margin-bottom: 2.5rem; opacity: 0; animation: rise .7s ease forwards; }
 .xp-eyebrow { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: .9rem; }
@@ -555,5 +587,5 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   .xp-main { padding-top: 1.5rem; }
   .xp-photos { grid-template-columns: 1fr; }
   .xp-entry { padding: 1.4rem 0; }
-  .xp-back { margin-bottom: 1.5rem; }
+  .xp-skills dl div { grid-template-columns: 1fr; gap: .15rem; }
 }

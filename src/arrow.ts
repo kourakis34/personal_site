@@ -136,7 +136,7 @@ export function setupBrainArrow(page: HTMLElement) {
   document.fonts?.addEventListener?.('loadingdone', onResize);
 
   window.addEventListener(
-    'hashchange',
+    'routechange',
     () => {
       ro.disconnect();
       mo.disconnect();

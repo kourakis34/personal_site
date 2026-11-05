@@ -39,7 +39,6 @@ export function renderHow(container: HTMLElement) {
   main.className = 'xp-main';
   main.innerHTML = `
     <div class="wrap">
-      <a href="#" class="xp-back">← Back</a>
       <header class="xp-hero">
         <p class="xp-eyebrow">How the chat works</p>
         <h1>A small, grounded assistant that only talks about me.</h1>

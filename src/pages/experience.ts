@@ -119,6 +119,16 @@ const COMPANIES: Company[] = [
   },
 ];
 
+const SKILLS: [string, string][] = [
+  ['Languages', 'Python, SQL, R, C'],
+  ['ML / AI', 'PyTorch, scikit-learn, LangGraph, RAG, MCP, OpenAI API, Langfuse'],
+  ['Data', 'pandas, matplotlib, Jupyter, Weights & Biases, DVC'],
+  ['Backend', 'FastAPI, Supabase, Kafka'],
+  ['Cloud & DevOps', 'Docker, Kubernetes, AWS, Prometheus, Grafana, Render'],
+  ['Tools', 'Git, LaTeX, Obsidian'],
+  ['Spoken', 'English, Spanish (fluent), Portuguese (fluent)'],
+];
+
 function esc(s: string): string {
   const d = document.createElement('div');
   d.textContent = s;
@@ -165,7 +175,6 @@ export function renderExperience(container: HTMLElement) {
   main.className = 'xp-main';
   main.innerHTML = `
     <div class="wrap">
-      <a href="#" class="xp-back">← Back</a>
       <h1 class="xp-title">Experience</h1>
 
       <ol class="xp-list">
@@ -178,6 +187,13 @@ export function renderExperience(container: HTMLElement) {
           </li>`,
         ).join('')}
       </ol>
+
+      <section class="xp-skills" aria-labelledby="skills-title">
+        <h2 id="skills-title" class="xp-section-title">Skills</h2>
+        <dl>
+          ${SKILLS.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}
+        </dl>
+      </section>
     </div>
   `;
 

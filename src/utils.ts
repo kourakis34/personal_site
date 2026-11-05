@@ -34,22 +34,33 @@ export function createHeader(): HTMLElement {
   const header = document.createElement('header');
   header.className = 'top';
 
+  const here = location.pathname.replace(/\/+$/, '') || '/';
+  const links = [
+    ['/about', 'About'],
+    ['/experience', 'Experience'],
+    ['/projects', 'Projects'],
+    ['/books', 'Books'],
+  ];
+  const nav = links
+    .map(([href, label]) => `<a href="${href}"${here === href ? ' aria-current="page"' : ''}>${label}</a>`)
+    .join('');
+
   header.innerHTML = `
     <div class="wrap top-row">
-      <div class="contact-links">
-        <a href="mailto:nicholaskourakis2004@gmail.com" aria-label="Email nicholaskourakis2004@gmail.com">
+      <a class="wordmark" href="/" aria-label="Nick Kourakis, home"${here === '/' ? ' aria-current="page"' : ''}>nk<span>.</span></a>
+      <nav class="site-nav" aria-label="Main">${nav}</nav>
+      <div class="top-actions">
+        <a class="icon-link" href="mailto:nicholaskourakis2004@gmail.com" aria-label="Email Nick" title="nicholaskourakis2004@gmail.com">
           ${createSvgIcon('mail')}
-          <span class="label-full">nicholaskourakis2004@gmail.com</span><span class="label-short">Email</span>
         </a>
-        <a href="https://www.linkedin.com/in/nick-kourakis-302526279/" target="_blank" rel="noopener">
+        <a class="icon-link" href="https://www.linkedin.com/in/nick-kourakis-302526279/" target="_blank" rel="noopener" aria-label="Nick on LinkedIn" title="LinkedIn">
           ${createSvgIcon('linkedin')}
-          LinkedIn
         </a>
+        <button id="theme-toggle" aria-label="Toggle color theme">
+          ${createSvgIcon('sun')}
+          ${createSvgIcon('moon')}
+        </button>
       </div>
-      <button id="theme-toggle" aria-label="Toggle color theme">
-        ${createSvgIcon('sun')}
-        ${createSvgIcon('moon')}
-      </button>
     </div>
   `;
 

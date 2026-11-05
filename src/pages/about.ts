@@ -18,22 +18,6 @@ export function renderAbout(container: HTMLElement) {
   const wrap = document.createElement('div');
   wrap.className = 'wrap';
 
-  const backLink = document.createElement('a');
-  backLink.href = '#';
-  backLink.className = 'back-link';
-  backLink.style.display = 'inline-block';
-  backLink.style.marginBottom = '2rem';
-  backLink.style.color = 'var(--accent)';
-  backLink.style.fontSize = '0.95rem';
-  backLink.style.transition = 'opacity 0.2s ease';
-  backLink.textContent = '← Back';
-  backLink.addEventListener('mouseenter', (e) => {
-    (e.target as HTMLElement).style.opacity = '0.7';
-  });
-  backLink.addEventListener('mouseleave', (e) => {
-    (e.target as HTMLElement).style.opacity = '1';
-  });
-  wrap.appendChild(backLink);
 
   const h1 = document.createElement('h1');
   h1.style.fontFamily = 'var(--font-display)';
