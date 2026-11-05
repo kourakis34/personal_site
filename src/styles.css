@@ -149,6 +149,42 @@ main.hero-wrap { flex: 1 1 auto; min-height: 0; display: flex; }
   animation: rise 0.7s ease 0.16s forwards;
 }
 
+.brain-line { position: relative; white-space: nowrap; }
+
+/* Hand-drawn arrow from "pick my brain" toward the chat box */
+.brain-arrow {
+  position: absolute;
+  left: calc(100% + 0.5rem);
+  top: 0.15em;
+  width: 120px;
+  height: 70px;
+  overflow: visible;
+  color: var(--accent);
+  pointer-events: none;
+}
+.brain-arrow path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.brain-arrow-path { animation: draw-arrow 0.9s ease-out 0.9s forwards; }
+.brain-arrow-head { animation: draw-arrow 0.25s ease-out 1.75s forwards; }
+
+@keyframes draw-arrow { to { stroke-dashoffset: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .brain-arrow path { animation: none; stroke-dashoffset: 0; }
+}
+
+/* In the stacked layout the photo sits between the text and the chat, so hide the arrow */
+@media (max-width: 800px) {
+  .brain-arrow { display: none; }
+}
+
 .bio .edit-note {
   display: block;
   margin-top: 0.6rem;

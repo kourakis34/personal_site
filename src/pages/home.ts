@@ -33,7 +33,10 @@ export function renderHome(container: HTMLElement) {
     <br><br>
     My hours are divided between <a href="#experience" class="bio-link">building</a>, playing soccer and <a href="#books" class="bio-link">reading</a>.
     <br><br>
-    Feel free to pick my brain!
+    <span class="brain-line">Feel free to pick my brain!<svg class="brain-arrow" viewBox="0 0 120 70" aria-hidden="true" focusable="false">
+      <path class="brain-arrow-path" pathLength="1" d="M4 18 C 24 4, 44 2, 50 16 C 56 30, 38 38, 35 26 C 32 12, 62 4, 82 16 C 98 26, 106 40, 110 58" />
+      <path class="brain-arrow-head" pathLength="1" d="M99 51 L110 59 L115 46" />
+    </svg></span>
   `;
   bioP.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', (e) => {
