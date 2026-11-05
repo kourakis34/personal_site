@@ -47,7 +47,7 @@ export function renderAbout(container: HTMLElement) {
   const content = document.createElement('div');
   content.innerHTML = `
     <p style="max-width: 65ch; margin-bottom: 1rem; color: var(--text-muted);">
-      Add your about section here. Tell visitors about yourself, your background, and what drives you.
+      I'm a senior at Carnegie Mellon studying Statistics &amp; Machine Learning (graduating May 2027) and a forward on the varsity soccer team. Born in Brazil, I grew up across six countries and speak English, Spanish and Portuguese. I build and evaluate LLM systems, and I'm looking for software engineering and AI roles in New York.
     </p>
   `;
   wrap.appendChild(content);

@@ -433,9 +433,6 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 .xp-bullets li { position: relative; padding-left: 1.1rem; color: var(--text-muted); font-size: .95rem; line-height: 1.55; }
 .xp-bullets li::before { content: ""; position: absolute; left: 0; top: .62em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: .8; }
 
-.xp-about { max-width: 760px; margin-bottom: 3rem; padding-left: 1rem; border-left: 2px solid var(--accent); opacity: 0; animation: rise .7s ease .15s forwards; }
-.xp-about h2 { font-family: var(--font-body); font-size: .78rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem; }
-.xp-about p { color: var(--text-muted); font-size: 1rem; max-width: 65ch; }
 
 .xp-photos { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; margin-top: 1.4rem; padding-top: 1.4rem; border-top: 1px solid var(--border); }
 .xp-photos figure { margin: 0; }
@@ -452,7 +449,7 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 .xp-cta-btn:hover { opacity: .9; transform: translateX(2px); }
 
 @media (prefers-reduced-motion: reduce) {
-  .xp-hero, .xp-stat, .xp-item, .xp-about { animation: none; opacity: 1; }
+  .xp-hero, .xp-stat, .xp-item { animation: none; opacity: 1; }
 }
 
 @media (max-width: 800px) {

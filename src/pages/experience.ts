@@ -226,11 +226,6 @@ export function renderExperience(container: HTMLElement) {
         ).join('')}
       </section>
 
-      <section class="xp-about" aria-labelledby="xp-about-title">
-        <h2 id="xp-about-title">About</h2>
-        <p>I'm a senior at Carnegie Mellon studying Statistics &amp; Machine Learning (graduating May 2027) and a forward on the varsity soccer team. Born in Brazil, I grew up across six countries and speak English, Spanish and Portuguese. I build and evaluate LLM systems, and I'm looking for software engineering and AI roles in New York.</p>
-      </section>
-
       <ol class="xp-timeline">
         ${COMPANIES.map(
           (c, i) => `
