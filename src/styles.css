@@ -64,7 +64,16 @@ header.top { flex: 0 0 auto; padding-top: 1.5rem; }
   transition: color 0.2s ease;
 }
 .contact-links a:hover { color: var(--accent); }
-.contact-links svg { width: 15px; height: 15px; }
+.contact-links svg { width: 15px; height: 15px; flex: none; }
+.contact-links .label-short { display: none; }
+
+/* ---------- Books ---------- */
+
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
 
 #theme-toggle {
   background: none;
@@ -352,4 +361,25 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   .side { height: auto; max-height: none; }
   .photo-frame { aspect-ratio: 4 / 5; flex: none; }
   .chat-console { max-height: none; }
+  .chat-console.expanded { flex: none; height: 70vh; height: 70svh; }
+  .books-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+}
+
+/* ---------- Phones ---------- */
+
+@media (max-width: 560px) {
+  .wrap, .hero { padding-left: 1rem; padding-right: 1rem; }
+  header.top { padding-top: 1rem; }
+  .top-row { gap: 1rem; }
+  .contact-links { gap: 1.25rem; min-width: 0; }
+  .contact-links .label-full { display: none; }
+  .contact-links .label-short { display: inline; }
+  .hero { gap: 2rem; padding-top: 1.75rem; }
+  .intro p.bio { margin-bottom: 0.5rem; }
+  .side { padding-top: 0; }
+  .photo-frame { width: 100%; max-width: 360px; margin: 0 auto; }
+  /* 16px stops iOS Safari from zooming in when the chat input is tapped */
+  .chat-console input { font-size: 16px; }
+  .chat-console button { font-size: 0.95rem; padding: 0 1.1rem; min-height: 44px; }
+  .books-grid { grid-template-columns: repeat(2, 1fr); gap: 1.25rem 1rem; }
 }

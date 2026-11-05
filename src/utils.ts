@@ -37,9 +37,9 @@ export function createHeader(): HTMLElement {
   header.innerHTML = `
     <div class="wrap top-row">
       <div class="contact-links">
-        <a href="mailto:nicholaskourakis2004@gmail.com">
+        <a href="mailto:nicholaskourakis2004@gmail.com" aria-label="Email nicholaskourakis2004@gmail.com">
           ${createSvgIcon('mail')}
-          nicholaskourakis2004@gmail.com
+          <span class="label-full">nicholaskourakis2004@gmail.com</span><span class="label-short">Email</span>
         </a>
         <a href="https://www.linkedin.com/in/nick-kourakis-302526279/" target="_blank" rel="noopener">
           ${createSvgIcon('linkedin')}

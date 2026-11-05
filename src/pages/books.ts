@@ -65,9 +65,7 @@ export function renderBooks(container: HTMLElement) {
 
   // Books grid
   const booksGrid = document.createElement('div');
-  booksGrid.style.display = 'grid';
-  booksGrid.style.gridTemplateColumns = 'repeat(4, 1fr)';
-  booksGrid.style.gap = '2rem';
+  booksGrid.className = 'books-grid';
   booksGrid.style.marginBottom = '2rem';
 
   BOOKS.forEach((book) => {
