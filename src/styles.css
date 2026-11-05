@@ -166,13 +166,16 @@ main.hero-wrap { flex: 1 1 auto; min-height: 0; display: flex; }
 .brain-arrow path {
   fill: none;
   stroke: currentColor;
-  stroke-width: 2.2;
+  stroke-width: 1.9;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
 }
 .brain-arrow-path { animation: draw-arrow 0.9s ease-out 0.9s forwards; }
+/* Get out of the way while the chat is open */
+.brain-arrow { transition: opacity 0.25s ease; }
+.hero:has(.chat-console.expanded) .brain-arrow { opacity: 0; }
 .brain-arrow-head { animation: draw-arrow 0.25s ease-out 1.75s forwards; }
 
 @keyframes draw-arrow { to { stroke-dashoffset: 0; } }

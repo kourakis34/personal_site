@@ -156,6 +156,7 @@ function setupBrainArrow(page: HTMLElement) {
   const draw = () => {
     if (!svg.isConnected) return;
     if (getComputedStyle(svg).display === 'none') return;
+    if (chat.classList.contains('expanded')) return;
     const l = line.getBoundingClientRect();
     const c = chat.getBoundingClientRect();
     // Start just after the text; end a little before the chat box, at the top of its label row.
@@ -173,25 +174,39 @@ function setupBrainArrow(page: HTMLElement) {
     svg.style.height = `${Math.abs(h) + pad * 2}px`;
     svg.setAttribute('viewBox', `0 ${-pad} ${w + 4} ${Math.abs(h) + pad * 2}`);
 
-    // Small loop near the start, then a long curve that arrives horizontally at the box.
+    // Hand-drawn feel: a short rise, one relaxed loop, then a lazy arc that
+    // drops onto the chat box. The loop uses fixed pixel sizes so it looks the
+    // same at any width; only the final arc stretches.
     const y = (v: number) => (h >= 0 ? v : -v);
+    const L = Math.min(70, w * 0.22); // where the loop sits
+    const c1x = L + 70;
+    const c2x = w - Math.min(90, w * 0.3);
+    const c2y = h - y(34);
     body.setAttribute(
       'd',
-      `M0 ${y(4)} C 14 ${y(-8)}, 38 ${y(-12)}, 44 ${y(2)} ` +
-        `C 50 ${y(16)}, 30 ${y(22)}, 28 ${y(10)} ` +
-        `C 26 ${y(-2)}, 52 ${y(-8)}, 72 ${y(4)} ` +
-        `C ${w * 0.55} ${y(16)}, ${w - 70} ${h}, ${w} ${h}`,
+      `M0 0 C 16 ${y(-14)}, ${L - 22} ${y(-22)}, ${L} ${y(-8)} ` +
+        `C ${L + 12} ${y(1)}, ${L + 6} ${y(18)}, ${L - 8} ${y(14)} ` +
+        `C ${L - 22} ${y(10)}, ${L - 14} ${y(-12)}, ${L + 10} ${y(-12)} ` +
+        `C ${c1x} ${y(-12)}, ${c2x} ${c2y}, ${w} ${h}`,
     );
-    head.setAttribute('d', `M${w - 11} ${h - 7} L${w} ${h} L${w - 11} ${h + 7}`);
+
+    // Arrowhead follows the curve's final direction, with slightly uneven barbs.
+    const ang = Math.atan2(h - c2y, w - c2x);
+    const barb = (len: number, spread: number) =>
+      `${(w - len * Math.cos(ang - spread)).toFixed(1)} ${(h - len * Math.sin(ang - spread)).toFixed(1)}`;
+    head.setAttribute('d', `M${barb(13, 0.5)} L${w} ${h} L${barb(11, -0.45)}`);
   };
 
   draw();
-  // Re-measure after the intro animation settles, on resize, and when the chat opens or closes.
+  // Re-measure after the intro animation settles and on resize (not when the chat opens).
   window.setTimeout(draw, 900);
   document.fonts?.ready.then(draw).catch(() => {});
   const ro = new ResizeObserver(draw);
   ro.observe(page);
-  ro.observe(chat);
+  // If the window changed size while the chat was open, catch up once it closes.
+  new MutationObserver(() => {
+    if (!chat.classList.contains('expanded')) draw();
+  }).observe(chat, { attributes: true, attributeFilter: ['class'] });
   window.addEventListener('resize', draw);
   window.addEventListener('hashchange', () => {
     ro.disconnect();
