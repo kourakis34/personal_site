@@ -61,7 +61,14 @@ export function renderBooks(container: HTMLElement) {
   h1.style.lineHeight = '1.2';
   h1.style.marginBottom = '2rem';
   h1.textContent = 'Books';
+  h1.style.marginBottom = '0.6rem';
   wrap.appendChild(h1);
+
+  const note = document.createElement('p');
+  note.className = 'books-note';
+  note.innerHTML =
+    'Always open to recommendations. <a href="mailto:nicholaskourakis2004@gmail.com?subject=Book%20recommendation">Send me one</a>.';
+  wrap.appendChild(note);
 
   // Books grid
   const booksGrid = document.createElement('div');
