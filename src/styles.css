@@ -297,11 +297,60 @@ nav.index a:focus-visible::after { width: 100%; }
 }
 
 .chat-console .cc-label {
+  font: inherit;
   font-size: 0.82rem;
   color: var(--text-muted);
-  padding: 0.75rem 1rem 0;
+  background: none;
+  border: none;
+  text-align: left;
+  width: 100%;
+  padding: 0.75rem 1rem 0.5rem;
+  cursor: pointer;
   flex: 0 0 auto;
 }
+.chat-console .cc-label:hover { color: var(--accent); }
+
+.chat-console .cc-panel {
+  display: none;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+}
+.chat-console.expanded .cc-panel { display: flex; }
+
+.cc-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+.chat-console .cc-chip {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+.chat-console .cc-chip:hover { border-color: var(--accent); }
+
+.chat-console .cc-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0 1rem 0.75rem;
+  flex: 0 0 auto;
+}
+.chat-console .cc-how {
+  font-size: 0.72rem;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.chat-console .cc-how:hover { text-decoration: underline; }
 
 .chat-console .cc-log {
   padding: 0.6rem 1rem;
@@ -372,15 +421,7 @@ nav.index a:focus-visible::after { width: 100%; }
 .chat-console .cc-status {
   font-size: 0.72rem;
   color: var(--text-muted);
-  opacity: 0.7;
-  padding: 0 1rem 0.75rem;
   font-style: italic;
-  flex: 0 0 auto;
-  display: none;
-}
-
-.chat-console.expanded .cc-status {
-  display: block;
 }
 
 a:focus-visible, button:focus-visible, input:focus-visible {
@@ -423,6 +464,23 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 }
 
 /* ---------- Experience page ---------- */
+
+/* ---------- How the chat works ---------- */
+
+.how-steps { list-style: none; display: grid; gap: 1rem; max-width: 760px; margin-bottom: 3rem; }
+.how-steps li { display: flex; gap: 1rem; background: var(--bg-alt); border: 1px solid var(--border); padding: 1.2rem 1.4rem; }
+.how-num { flex: none; width: 1.9rem; height: 1.9rem; border-radius: 999px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font-weight: 600; font-size: .9rem; }
+.how-steps h2, .how-section h2 { font-family: var(--font-display); font-weight: 500; font-size: 1.2rem; margin-bottom: .35rem; }
+.how-steps p, .how-section p { color: var(--text-muted); max-width: 65ch; }
+.how-section { max-width: 760px; margin-bottom: 2.25rem; }
+.how-stack { display: grid; gap: .5rem; margin-top: .5rem; }
+.how-stack div { display: grid; grid-template-columns: 10rem 1fr; gap: 1rem; padding: .5rem 0; border-bottom: 1px solid var(--border); }
+.how-stack dt { font-weight: 500; }
+.how-stack dd { color: var(--text-muted); }
+@media (max-width: 560px) {
+  .how-steps li { padding: 1rem; }
+  .how-stack div { grid-template-columns: 1fr; gap: .1rem; }
+}
 
 .xp-main { padding: 2.5rem 0 4rem; flex: 1; }
 .xp-back { display: inline-block; color: var(--accent); font-size: 0.95rem; margin-bottom: 2.5rem; transition: opacity .2s ease; }

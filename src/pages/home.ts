@@ -65,25 +65,48 @@ export function renderHome(container: HTMLElement) {
   const chatConsole = document.createElement('div');
   chatConsole.className = 'chat-console';
 
-  const chatLabel = document.createElement('div');
+  const chatLabel = document.createElement('button');
+  chatLabel.type = 'button';
   chatLabel.className = 'cc-label';
   chatLabel.textContent = 'Ask about me';
+  chatLabel.setAttribute('aria-expanded', 'false');
+  chatLabel.setAttribute('aria-controls', 'cc-panel');
   chatConsole.appendChild(chatLabel);
+
+  const chatPanel = document.createElement('div');
+  chatPanel.id = 'cc-panel';
+  chatPanel.className = 'cc-panel';
 
   const chatLog = document.createElement('div');
   chatLog.className = 'cc-log';
+  chatLog.setAttribute('role', 'log');
+  chatLog.setAttribute('aria-live', 'polite');
+  chatLog.setAttribute('aria-label', 'Chat about Nick');
 
-  const firstLine = document.createElement('div');
-  firstLine.className = 'line';
-  firstLine.innerHTML = '<span class="prompt-char">&gt;</span>What did Nick work on at L3Harris?';
-  chatLog.appendChild(firstLine);
+  const suggestions = document.createElement('div');
+  suggestions.className = 'cc-suggestions';
+  suggestions.setAttribute('aria-label', 'Suggested questions');
+  [
+    'What did Nick work on at L3Harris?',
+    'What roles is Nick looking for?',
+    "What are Nick's best projects?",
+  ].forEach((q) => {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'cc-chip';
+    chip.textContent = q;
+    suggestions.appendChild(chip);
+  });
+  chatLog.appendChild(suggestions);
 
-  chatConsole.appendChild(chatLog);
+  chatPanel.appendChild(chatLog);
 
   const chatForm = document.createElement('form');
   const chatInput = document.createElement('input');
   chatInput.type = 'text';
   chatInput.placeholder = 'Type a question…';
+  chatInput.setAttribute('aria-label', 'Ask a question about Nick');
+  chatInput.maxLength = 500;
 
   const chatButton = document.createElement('button');
   chatButton.type = 'submit';
@@ -91,12 +114,17 @@ export function renderHome(container: HTMLElement) {
 
   chatForm.appendChild(chatInput);
   chatForm.appendChild(chatButton);
-  chatConsole.appendChild(chatForm);
+  chatPanel.appendChild(chatForm);
 
-  const chatStatus = document.createElement('div');
-  chatStatus.className = 'cc-status';
-  chatStatus.textContent = 'Conversations may be logged';
-  chatConsole.appendChild(chatStatus);
+  const chatFooter = document.createElement('div');
+  chatFooter.className = 'cc-footer';
+  chatFooter.innerHTML = `
+    <span class="cc-status" aria-live="polite">Ready to chat</span>
+    <a class="cc-how" href="#how-it-works">How does this work?</a>
+  `;
+  chatPanel.appendChild(chatFooter);
+
+  chatConsole.appendChild(chatPanel);
 
   sideDiv.appendChild(chatConsole);
   heroDiv.appendChild(sideDiv);

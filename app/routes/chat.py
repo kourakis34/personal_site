@@ -1,10 +1,12 @@
 import time
 import httpx
-from fastapi import APIRouter, HTTPException, BackgroundTasks
+from fastapi import APIRouter, HTTPException, BackgroundTasks, Request
+from fastapi.concurrency import run_in_threadpool
 from app.models import ChatRequest, ChatResponse
 from app.config import settings
 from app.db import log_conversation
 from app.profile import SYSTEM_PROMPT
+from app.rate_limit import check_rate_limit
 from typesafe_sdk import Noul, TypeSafeClient
 
 client = TypeSafeClient(api_key=settings.typesafe_api_key)
@@ -12,24 +14,32 @@ router = APIRouter()
 
 
 
-async def is_question_about_nick(message: str) -> bool:
-    ticket = message
+RELEVANCE_INSTRUCTIONS = (
+    "Is this message a question or request about Nick Kourakis, the owner of this personal website? "
+    "Count it as about Nick if it asks about him directly or with 'you', 'he' or 'his' "
+    "(for example his studies, school, work, internships, projects, skills, job search, soccer, "
+    "languages, background, interests, books, or how to contact him), or is a greeting or a "
+    "follow-up in a conversation about him. General questions or tasks unrelated to Nick "
+    "(trivia, coding help, writing poems, math) are not about Nick."
+)
 
+
+def _classify(message: str) -> float:
     response = client.system_one(
-        state=ticket,
-        questions={
-            "is_relevant": Noul(
-                instructions=f"This message inquires about Nick?",
-            ),
-        },
+        state=message,
+        questions={"is_relevant": Noul(instructions=RELEVANCE_INSTRUCTIONS)},
     )
+    return response.answers["is_relevant"].noul
 
-    if response.answers["is_relevant"].noul > 0.5:
-        return [True, response.answers["is_relevant"].noul]
-    else:
-        return [False, response.answers["is_relevant"].noul]
 
-    
+async def is_question_about_nick(message: str) -> tuple[bool, float]:
+    """Return (is_relevant, score). Fails open so a classifier outage doesn't break chat."""
+    try:
+        score = await run_in_threadpool(_classify, message)
+    except Exception as e:
+        print(f"Relevance classifier failed, allowing message: {type(e).__name__}: {e}")
+        return True, 1.0
+    return score >= settings.relevance_threshold, score
 
 
 async def call_llm(message: str) -> tuple[str, int, int]:
@@ -77,7 +87,7 @@ async def call_llm(message: str) -> tuple[str, int, int]:
 
 
 @router.post("/api/chat", response_model=ChatResponse)
-async def chat(request: ChatRequest, background_tasks: BackgroundTasks):
+async def chat(request: ChatRequest, http_request: Request, background_tasks: BackgroundTasks):
     """Chat endpoint: accept message, call LLM, return response."""
 
     if not request.message.strip():
@@ -86,13 +96,14 @@ async def chat(request: ChatRequest, background_tasks: BackgroundTasks):
     if len(request.message) > settings.max_message_length:
         raise HTTPException(status_code=400, detail=f"Message exceeds max length of {settings.max_message_length}")
 
+    check_rate_limit(http_request)
+
     start_time = time.time()
 
     # Check if question is about Nick
     is_relevant = await is_question_about_nick(request.message)
 
     if not is_relevant[0]:
-        number = 100 - is_relevant[1]*100
         response_text = "Keep questions related to Nick and his experience."
         latency_ms = int((time.time() - start_time) * 1000)
         if settings.enable_logging:
