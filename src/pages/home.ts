@@ -25,11 +25,6 @@ export function renderHome(container: HTMLElement) {
   h1.textContent = 'Nick Kourakis';
   introDiv.appendChild(h1);
 
-  const roleP = document.createElement('p');
-  roleP.className = 'role';
-  roleP.textContent = 'seeking eudaimonia!';
-  introDiv.appendChild(roleP);
-
   const bioP = document.createElement('p');
   bioP.className = 'bio';
   bioP.innerHTML = `
