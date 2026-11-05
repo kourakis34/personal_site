@@ -10,11 +10,18 @@ interface Role {
   tags?: string[];
 }
 
+interface Photo {
+  src: string;
+  alt: string;
+  caption: string;
+}
+
 interface Company {
   name: string;
   kind: string;
   current?: boolean;
   roles: Role[];
+  photos?: Photo[];
 }
 
 const HIGHLIGHTS = [
@@ -56,6 +63,18 @@ const COMPANIES: Company[] = [
           { value: '+83%', label: 'precision' },
         ],
         tags: ['Python', 'OpenAI API', 'GitPython', 'asyncio', 'Security'],
+      },
+    ],
+    photos: [
+      {
+        src: 'experience/l3harris-intern-cohort.jpg',
+        alt: 'Nick with the L3Harris intern class in front of the L3Harris headquarters building',
+        caption: 'With the L3Harris intern class',
+      },
+      {
+        src: 'experience/l3harris-melbourne.jpg',
+        alt: 'Nick standing next to the red L3Harris sculpture on campus',
+        caption: 'On campus at L3Harris',
       },
     ],
   },
@@ -145,6 +164,22 @@ function initials(name: string): string {
     .join('');
 }
 
+function renderPhotos(photos: Photo[]): string {
+  const base = import.meta.env.BASE_URL;
+  return `
+    <div class="xp-photos">
+      ${photos
+        .map(
+          (p) => `
+        <figure>
+          <img src="${base}${esc(p.src)}" alt="${esc(p.alt)}" loading="lazy" decoding="async">
+          <figcaption>${esc(p.caption)}</figcaption>
+        </figure>`,
+        )
+        .join('')}
+    </div>`;
+}
+
 function renderRole(r: Role): string {
   return `
     <div class="xp-role">
@@ -191,6 +226,11 @@ export function renderExperience(container: HTMLElement) {
         ).join('')}
       </section>
 
+      <section class="xp-about" aria-labelledby="xp-about-title">
+        <h2 id="xp-about-title">About</h2>
+        <p>I'm a senior at Carnegie Mellon studying Statistics &amp; Machine Learning (graduating May 2027) and a forward on the varsity soccer team. Born in Brazil, I grew up across six countries and speak English, Spanish and Portuguese. I build and evaluate LLM systems, and I'm looking for software engineering and AI roles in New York.</p>
+      </section>
+
       <ol class="xp-timeline">
         ${COMPANIES.map(
           (c, i) => `
@@ -206,6 +246,7 @@ export function renderExperience(container: HTMLElement) {
                 ${c.roles.length > 1 ? `<span class="xp-badge xp-badge-soft">${c.roles.length} roles</span>` : ''}
               </div>
               ${c.roles.map(renderRole).join('')}
+              ${c.photos ? renderPhotos(c.photos) : ''}
             </article>
           </li>`,
         ).join('')}
