@@ -7,16 +7,16 @@ interface Book {
 }
 
 const BOOKS: Book[] = [
-  { title: 'Nuclear War', author: 'Annie Jacobsen', image: '/books/nuclear-war.jpg' },
-  { title: 'Biological Warfare', author: 'Annie Jacobsen', image: '/books/biologicalwar.jpg' },
-  { title: 'More Money than God', author: 'Sebastian Mallaby', image: '/books/moremoneythangod.jpg' },
-  { title: 'Project Hail Mary', author: 'Andy Weir', image: '/books/project-hail-mary.jpg' },
-  { title: 'The Bigs', author: 'Ben Carpenter', image: '/books/theb.jpg' },
-  { title: 'Atomic Habits', author: 'James Clear', image: '/books/ah.jpg' },
-  { title: 'The Subtle Art of Not Giving a F*ck', author: 'Mark Manson', image: '/books/tsaongaf.jpg' },
-  { title: 'The Power of Habit', author: 'Charles Duhigg', image: '/books/powerofhabit.jpg' },
-  { title: 'Outliers', author: 'Malcolm Gladwell', image: '/books/outliers.jpg' },
-  { title: 'Factfulness', author: 'Hans Rosling', image: '/books/factfullness.jpg' },
+  { title: 'Nuclear War', author: 'Annie Jacobsen', image: import.meta.env.BASE_URL + 'books/nuclear-war.jpg' },
+  { title: 'Biological Warfare', author: 'Annie Jacobsen', image: import.meta.env.BASE_URL + 'books/biologicalwar.jpg' },
+  { title: 'More Money than God', author: 'Sebastian Mallaby', image: import.meta.env.BASE_URL + 'books/moremoneythangod.jpg' },
+  { title: 'Project Hail Mary', author: 'Andy Weir', image: import.meta.env.BASE_URL + 'books/project-hail-mary.jpg' },
+  { title: 'The Bigs', author: 'Ben Carpenter', image: import.meta.env.BASE_URL + 'books/theb.jpg' },
+  { title: 'Atomic Habits', author: 'James Clear', image: import.meta.env.BASE_URL + 'books/ah.jpg' },
+  { title: 'The Subtle Art of Not Giving a F*ck', author: 'Mark Manson', image: import.meta.env.BASE_URL + 'books/tsaongaf.jpg' },
+  { title: 'The Power of Habit', author: 'Charles Duhigg', image: import.meta.env.BASE_URL + 'books/powerofhabit.jpg' },
+  { title: 'Outliers', author: 'Malcolm Gladwell', image: import.meta.env.BASE_URL + 'books/outliers.jpg' },
+  { title: 'Factfulness', author: 'Hans Rosling', image: import.meta.env.BASE_URL + 'books/factfullness.jpg' },
 ];
 
 export function renderBooks(container: HTMLElement) {

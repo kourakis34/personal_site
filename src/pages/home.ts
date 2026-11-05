@@ -57,7 +57,7 @@ export function renderHome(container: HTMLElement) {
   photoFrame.className = 'photo-frame';
 
   const img = document.createElement('img');
-  img.src = 'Nick Kourakis.jpg';
+  img.src = import.meta.env.BASE_URL + 'Nick%20Kourakis.jpg';
   img.alt = 'Photo of Nick Kourakis';
   photoFrame.appendChild(img);
 
