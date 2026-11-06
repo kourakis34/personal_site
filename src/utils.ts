@@ -53,7 +53,7 @@ export function createHeader(): HTMLElement {
         <a class="icon-link" href="mailto:nicholaskourakis2004@gmail.com" aria-label="Email Nick" title="nicholaskourakis2004@gmail.com">
           ${createSvgIcon('mail')}
         </a>
-        <a class="icon-link" href="https://www.linkedin.com/in/nick-kourakis-302526279/" target="_blank" rel="noopener" aria-label="Nick on LinkedIn" title="LinkedIn">
+        <a class="icon-link" href="https://www.linkedin.com/in/nick-kourakis/" target="_blank" rel="noopener" aria-label="Nick on LinkedIn" title="LinkedIn">
           ${createSvgIcon('linkedin')}
         </a>
         <button id="theme-toggle" aria-label="Toggle color theme">
