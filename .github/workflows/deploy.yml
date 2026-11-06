@@ -10,9 +10,11 @@ permissions:
   pages: write
   id-token: write
 
+# Don't cancel a deploy that's already running: a newer push waits its turn,
+# so rapid pushes can't cancel each other and leave the site un-updated.
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
