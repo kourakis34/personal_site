@@ -4,14 +4,6 @@ interface Book {
   title: string;
   author: string;
   image: string;
-  /** Optional direct link; defaults to a Goodreads search for the book. */
-  url?: string;
-}
-
-function bookLink(book: Book): string {
-  if (book.url) return book.url;
-  const q = encodeURIComponent(`${book.title} ${book.author}`);
-  return `https://www.goodreads.com/search?q=${q}`;
 }
 
 const BOOKS: Book[] = [
@@ -68,18 +60,12 @@ export function renderBooks(container: HTMLElement) {
   booksGrid.style.marginBottom = '2rem';
 
   BOOKS.forEach((book) => {
-    const bookCard = document.createElement('a');
-    bookCard.className = 'book-card';
-    bookCard.href = bookLink(book);
-    bookCard.target = '_blank';
-    bookCard.rel = 'noopener noreferrer';
-    bookCard.setAttribute('aria-label', `${book.title} by ${book.author}`);
+    const bookCard = document.createElement('div');
     bookCard.style.display = 'flex';
     bookCard.style.flexDirection = 'column';
     bookCard.style.gap = '1rem';
 
     const coverContainer = document.createElement('div');
-    coverContainer.className = 'book-cover';
     coverContainer.style.aspectRatio = '2 / 3';
     coverContainer.style.backgroundColor = 'var(--bg-alt-2)';
     coverContainer.style.borderRadius = '6px';
