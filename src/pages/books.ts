@@ -66,12 +66,12 @@ export function renderBooks(container: HTMLElement) {
     bookCard.style.gap = '1rem';
 
     const coverContainer = document.createElement('div');
+    coverContainer.className = 'book-cover';
     coverContainer.style.aspectRatio = '2 / 3';
     coverContainer.style.backgroundColor = 'var(--bg-alt-2)';
     coverContainer.style.borderRadius = '6px';
     coverContainer.style.overflow = 'hidden';
     coverContainer.style.border = '1px solid var(--border)';
-    coverContainer.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
 
     const img = document.createElement('img');
     img.src = book.image;

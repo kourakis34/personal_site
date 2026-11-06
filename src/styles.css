@@ -99,6 +99,27 @@ header.top { flex: 0 0 auto; padding-top: 1.5rem; }
 .books-note a { color: var(--accent); border-bottom: 1px solid currentColor; }
 .books-note a:hover { opacity: .75; }
 
+/* Subtle book-like shading: darker spine on the left, faint highlight, soft shadow */
+.book-cover {
+  position: relative;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 6px 16px rgba(0, 0, 0, 0.14);
+}
+.book-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.22) 0%,
+    rgba(0, 0, 0, 0.06) 3%,
+    rgba(255, 255, 255, 0.12) 5%,
+    rgba(255, 255, 255, 0) 9%,
+    rgba(0, 0, 0, 0) 85%,
+    rgba(0, 0, 0, 0.06) 100%
+  );
+}
+
 .books-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
