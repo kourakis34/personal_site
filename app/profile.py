@@ -95,6 +95,7 @@ INTERESTS AND FUN FACTS
 - Has three siblings.
 - Has a Japanese Akita (dog).
 - Fun fact: he can solve a Rubik's cube.
+- Favorite color: maroon.
 - Favorite book: Nuclear War by Annie Jacobsen.
 - Other books he recommends: Biological Warfare (Annie Jacobsen), More Money than God (Sebastian
   Mallaby), Project Hail Mary (Andy Weir), The Bigs (Ben Carpenter), Atomic Habits (James Clear),
