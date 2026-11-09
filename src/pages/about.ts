@@ -1,5 +1,4 @@
 import { createHeader } from '../utils';
-import { setupPlaces } from '../places';
 
 export function renderAbout(container: HTMLElement) {
   container.innerHTML = '';
@@ -37,18 +36,6 @@ export function renderAbout(container: HTMLElement) {
     <p style="max-width: 65ch; margin-bottom: 1rem; color: var(--text-muted);">
       On the field, I play forward (#27) for the Carnegie Mellon Tartans, an NCAA Division III men's soccer team in the UAA.
     </p>
-    <section class="places" aria-labelledby="places-title">
-      <h2 id="places-title">Places I've lived</h2>
-      <div class="places-body">
-        <div class="places-globe">
-          <canvas aria-label="Globe marking the cities Nick has lived in. Drag to spin it." role="img"></canvas>
-        </div>
-        <div class="places-side">
-          <ul class="places-list"></ul>
-          <p class="places-hint">Drag the globe to spin it, or pick a city.</p>
-        </div>
-      </div>
-    </section>
     <section class="about-courses" aria-labelledby="about-courses-title">
       <h2 id="about-courses-title">Relevant coursework</h2>
       <ul>
@@ -75,5 +62,4 @@ export function renderAbout(container: HTMLElement) {
   page.appendChild(main);
 
   container.appendChild(page);
-  setupPlaces(page);
 }
